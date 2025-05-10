@@ -11,4 +11,4 @@ const uploadProductSchema = new mongoose.Schema({
     timestamps: true,
 })
 
-export default mongoose.model("Product", uploadProductSchema);
+export default mongoose.model("products", uploadProductSchema);

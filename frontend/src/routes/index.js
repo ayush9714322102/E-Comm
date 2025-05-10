@@ -29,6 +29,13 @@ import Reception from "../categorypages/Reception";
 import UtsavCollection from "../categorypages/UtsavCollection";
 import Cart from "../pages/Cart";
 import SearchProduct from "../pages/SearchProduct";
+import AllOrder from "../pages/AllOrder";
+import Success from "../pages/Success";
+import Cancel from "../pages/Cancel";
+import OrderPage from "../pages/OrderPage";
+import Policy from "../FooterPages/Policy";
+import Return from "../FooterPages/Return";
+import OrderForm from "../pages/OrderForm";
 
 const router = createBrowserRouter([
     {
@@ -52,7 +59,7 @@ const router = createBrowserRouter([
                 element: <Signup />
             },
             {
-                path: "/productcategory",  // Handle the case where there is no categoryName
+                path: "/productcategory", 
                 element: <CategoryProducts />,
             },
             {
@@ -140,6 +147,30 @@ const router = createBrowserRouter([
                 element: <SearchProduct />
             },
             {
+                path: "success",
+                element: <Success/>
+            },
+            {
+                path: "cancel",
+                element: <Cancel/>
+            },
+            {
+                path: "order",
+                element: <OrderPage/>
+            },
+            {
+                path: "policy",
+                element: <Policy/>
+            },
+            {
+                path: "return",
+                element: <Return/>
+            },
+            {
+                path: "orderdetails",
+                element: <OrderForm/>
+            },
+            {
                 path: "admin-panel",
                 element: <AdminPanel />,
                 children: [
@@ -151,6 +182,10 @@ const router = createBrowserRouter([
                         path: "all-product",
                         element: <AllProducts />
                     },
+                    {
+                        path: "all-orders",
+                        element:<AllOrder/>
+                    }
                 ]
             }
         ]

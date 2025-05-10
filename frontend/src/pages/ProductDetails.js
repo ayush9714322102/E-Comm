@@ -113,7 +113,7 @@ const ProductDetails = () => {
           {/* Buttons */}
           <div className='flex flex-col gap-4'>
             <button className='uppercase border-2 border-pink-800 w-full py-2 hover:bg-pink-800 hover:text-white text-black' onClick={(e) => handleaddToCart(e, data?._id)}>Add To Cart</button>
-            <button className='uppercase border-2 border-pink-800 bg-pink-800 text-white w-full py-2'>Buy it Now</button>
+            <button className='uppercase border-2 border-pink-800 bg-pink-800 text-white w-full py-2' onClick={(e) => handleaddToCart(e, data?._id)}>Buy it Now</button>
             <button className='uppercase border-2 border-pink-800 text-black w-full py-2'>
               <Link
                 target='_blank'

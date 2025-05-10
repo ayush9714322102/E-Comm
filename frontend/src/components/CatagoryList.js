@@ -28,6 +28,9 @@ const CategoryList = () => {
 
     return (
         <div className='container mx-auto overflow-x-hidden my-3 py-10'>
+            <div className='flex justify-center my-12'>
+                <h2 className='text-3xl px-1 text-center text-white bg-pink-800 uppercase tracking-wider'>SHOP BY occasion</h2>
+            </div>
             <div className='flex overflow-x-auto lg:justify-center whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 w-full gap-5'>
                 {
                     loading ? (

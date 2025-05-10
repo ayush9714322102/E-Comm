@@ -9,6 +9,9 @@ import ROLE from "../common/role.js";
 import { setUserDetails } from "../store/userSlice.js";
 import { FaSearch } from "react-icons/fa";
 import Context from "../context/index.js";
+import { RiShoppingBag4Fill } from "react-icons/ri";
+
+
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.user);
@@ -41,6 +44,8 @@ const Header = () => {
   const [ismenDropdownOpen, setmenDropdownOpen] = useState(false);
   const [isshopDropdownOpen, setshopDropdownOpen] = useState(false);
   const dropdownTimeoutRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovereds, setIsHovereds] = useState(false);
 
   const handleMouseEnter = () => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -128,11 +133,35 @@ const Header = () => {
             onClick={() => setIsSearchOpen(true)}
           />
 
+          <div className="relative">
+            <Link
+              to="/order"
+              className="text-2xl cursor-pointer hover:text-pink-800 transition"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <RiShoppingBag4Fill />
+            </Link>
+            {isHovered && (
+              <div className="absolute top-full left-0 mt-2 bg-rose-500 text-white p-2 rounded text-sm">
+                Order
+              </div>
+            )}
+          </div>
 
-          <Link to="/cart" className="relative text-2xl">
-            <FaShoppingCart className="hover:text-pink-800 transition" />
-            <span className="bg-pink-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-2 -right-2">{context.CartProductCount}</span>
-          </Link>
+
+          <div className="relative">
+            <Link to="/cart" className="relative text-2xl" onMouseEnter={() => setIsHovereds(true)}
+              onMouseLeave={() => setIsHovereds(false)}>
+              <FaShoppingCart className="hover:text-pink-800 transition" />
+              <span className="bg-pink-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-2 -right-2">{context.CartProductCount}</span>
+            </Link>
+            {isHovereds && (
+              <div className="absolute top-full left-0 mt-2 bg-rose-500 text-white p-2 rounded text-sm">
+                Cart
+              </div>
+            )}
+          </div>
 
           <div>
             {
@@ -153,6 +182,12 @@ const Header = () => {
 
       {/* Mobile Icons (Always Visible Below Logo) */}
       <div className="md:hidden bg-white border-t px-6 py-3 flex justify-around items-center">
+          <Link
+            to="/order"
+            className="text-2xl cursor-pointer hover:text-pink-800 transition">
+            <RiShoppingBag4Fill />
+          </Link>
+
         <Link to="/cart" className="relative text-2xl">
           <FaShoppingCart className="hover:text-pink-800 transition" />
           <span className="bg-pink-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-2 -right-2">{context.CartProductCount}</span>
@@ -267,7 +302,7 @@ const Header = () => {
       {isSearchOpen && (
         <div className="">
           <div className="flex gap-3 relative mx-9 p-3 border-t-2 border-gray-300">
-            <FaSearch className="text-lg text-slate-600 mt-1"/>
+            <FaSearch className="text-lg text-slate-600 mt-1" />
             <input
               type="text"
               value={searchInput}

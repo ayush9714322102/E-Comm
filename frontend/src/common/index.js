@@ -1,10 +1,10 @@
 const backendDomin = "http://localhost:3000"
 
 const SummaryApi = {
-    SignUp : {
-        url : `${backendDomin}/user/signup`,
-        method : "post",
-    }, 
+    SignUp: {
+        url: `${backendDomin}/user/signup`,
+        method: "post",
+    },
     SingIn: {
         url: `${backendDomin}/login/signin`,
         method: "post"
@@ -26,7 +26,7 @@ const SummaryApi = {
         method: "post",
     },
     uploadproduct: {
-        url:`${backendDomin}/product/upload-product`,
+        url: `${backendDomin}/product/upload-product`,
         method: "post",
     },
     getAllProduct: {
@@ -41,13 +41,13 @@ const SummaryApi = {
         url: `${backendDomin}/product/get-catagoryproduct`,
         method: "get",
     },
-    categorywiseproduct:{
-        url:`${backendDomin}/product/category-product`,
-        method:"post"
+    categorywiseproduct: {
+        url: `${backendDomin}/product/category-product`,
+        method: "post"
     },
-    productDetails:{
-        url:`${backendDomin}/product/product-details`,
-        method:"post"
+    productDetails: {
+        url: `${backendDomin}/product/product-details`,
+        method: "post"
     },
     addToCart: {
         url: `${backendDomin}/product/addtocart`,
@@ -69,14 +69,40 @@ const SummaryApi = {
         url: `${backendDomin}/product/delete-card-product`,
         method: "post",
     },
-    SearchProduct:{
+    SearchProduct: {
         url: `${backendDomin}/product/search`,
         method: "get",
     },
-    filterProduct:{
-        url:`${backendDomin}/product/filter-product`,
-        method:"post"
+    filterProduct: {
+        url: `${backendDomin}/product/filter-product`,
+        method: "post"
     },
+    createOrder: {
+        url: `${backendDomin}/payment/createOrder`,
+        method: "post"
+    },
+    verifyPayment: {
+        url: `${backendDomin}/payment/verifyPayment`,
+        method: "post"
+    },
+    getOrder: {
+        url: `${backendDomin}/order/getOrder`,
+        method: "get"
+    },
+    cancelOrder: { url: (id) => `${backendDomin}/order/cancelOrder/${id}`, method: "PUT" },
+    deleteOrder: { url: (id) => `${backendDomin}/order/deleteOrder/${id}`, method: "DELETE" },
+    getAllOrders: {
+        url: `${backendDomin}/order/getAllOrders`,
+        method: "get"
+    },
+    updateOrder: {
+        url: `${backendDomin}/order/updateOrder`,
+        method: "put"
+    },
+    orderDetails : {
+        url: `${backendDomin}/order/create`,
+        method: "post"
+    }
 }
 
 export default SummaryApi;

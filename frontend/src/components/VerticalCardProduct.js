@@ -53,7 +53,7 @@ const VerticalCardProduct = ({ category, heading }) => {
     return (
         <div className='container mx-auto px-4 my-6 relative'>
             <div className='flex justify-center my-12'>
-                <h2 className='text-4xl px-1 text-center text-white bg-pink-800'>{heading}</h2>
+                <h2 className='text-3xl px-1 text-center text-white bg-pink-800 uppercase tracking-wider'>{heading}</h2>
             </div>
 
             <button
