@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import fetchCategoryWiseProduct from '../helpers/fetchCategoryWiseProduct.js';
 import DisplayCurrency from "../helpers/DisplayCurrency.js";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart.js';
 import context from '../context/index.js';
 import { useContext } from 'react';
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Api from '../common/index.js';
 import { toast } from 'react-toastify';
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
-const CategoryThreeBox = ({ category, products = null }) => {
+const CategoryProductsDetails = ({ category, heading, content, products = null }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(10).fill(0);
@@ -17,12 +17,10 @@ const CategoryThreeBox = ({ category, products = null }) => {
     const { fetchUserAddToCart } = useContext(context);
     const [isWishlisted, setIsWishlisted] = useState(false);
     const { fetchAddTocart, fetchWishlist } = useContext(context);
-    const navigate = useNavigate();
 
     const handleaddToCart = async (e, id) => {
         await addToCart(e, id)
         fetchUserAddToCart();
-        navigate("/cart")
     }
 
     useEffect(() => {
@@ -65,8 +63,11 @@ const CategoryThreeBox = ({ category, products = null }) => {
     };
 
     return (
-        <div className='container mx-auto px-4 my-6 relative'>
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-24'>
+        <div className='container mx-auto my-6 relative'>
+            <div className='py-2 border-b border-slate-200 mb-5'>
+                <h2 className='text-3xl underline text-center py-5  mb-2 uppercase'>{heading}</h2>
+            </div>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-10'>
                 {
                     loading ? (
                         loadingList.map((product, index) => (
@@ -141,4 +142,4 @@ const CategoryThreeBox = ({ category, products = null }) => {
     );
 };
 
-export default CategoryThreeBox;
+export default CategoryProductsDetails;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import SummaryApi from '../common/index.js'
 import { FaStar, FaStarHalf } from "react-icons/fa6";
 import DisplayCurrency from "../helpers/DisplayCurrency.js";
@@ -10,6 +10,10 @@ import { FaPlus } from "react-icons/fa6";
 import addToCart from '../helpers/addToCart.js';
 import context from '../context/index.js';
 import { useContext } from 'react';
+import CategoryProductsDetails from '../components/CategoryProductDetails.js';
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import Api from '../common/index.js';
+import { toast } from 'react-toastify';
 
 const ProductDetails = () => {
   const [data, setData] = useState({
@@ -25,15 +29,19 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true)
   const productImageList = new Array(4).fill(null)
   const [activeImage, setActiveImage] = useState("")
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { fetchAddTocart, fetchWishlist } = useContext(context);
 
   const [openOffer, setOpenOffer] = useState(false)
+  const navigate = useNavigate()
 
   const { fetchUserAddToCart } = useContext(context);
 
-    const handleaddToCart = async (e,id) => {
-        await addToCart(e,id)
-        fetchUserAddToCart();
-    }
+  const handleaddToCart = async (e, id) => {
+    await addToCart(e, id)
+    fetchUserAddToCart();
+    navigate("/cart")
+  }
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -59,14 +67,51 @@ const ProductDetails = () => {
     setActiveImage(imageURL)
   }
 
+  const addToWishlist = async (productId) => {
+    const response = await fetch(Api.addToWishlist.url, {
+      method: Api.addToWishlist.method,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ productId })
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      toast.success("Added to wishlist");
+      setIsWishlisted(true);
+      fetchWishlist();
+    } else {
+      toast.error(data.message);
+    }
+  };
+
   return (
     <div className='min-h-screen mt-40 container mx-auto p-4 px-20'>
       <div className='min-h-[500px] flex flex-col lg:flex-row gap-16'>
         {/* Product Image */}
         <div className='h-auto flex flex-col lg:flex-row-reverse gap-8'>
-          <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200'>
+          <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative'>
             <img src={activeImage} className='w-full object-contain' alt='Product-Image' />
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault();
+                addToWishlist();
+              }}
+              className="absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:bg-red-100 transition-all z-10"
+              title="Add to Wishlist">
+              {isWishlisted ? (
+                <AiFillHeart size={24} className="text-red-500" />
+              ) :
+                (
+                  <AiOutlineHeart size={24} className="text-gray-500 hover:bg-red-500" />
+                )}
+            </button>
           </div>
+
           <div>
             {
               loading ? (
@@ -162,7 +207,7 @@ const ProductDetails = () => {
                 onClick={() => setOpenOffer(!openOffer)}
                 className="w-full flex items-center justify-between font-semibold text-left text-base">
                 <span className='text-lg'>Description</span>
-                <FaPlus className={`transition-transform duration-300 ${openOffer ? "rotate-180" : ""}`}/>
+                <FaPlus className={`transition-transform duration-300 ${openOffer ? "rotate-180" : ""}`} />
               </button>
 
               <div className={`overflow-hidden transition-all duration-500 ${openOffer ? "max-h-96 mt-2" : "max-h-0"} text-sm`}>
@@ -172,6 +217,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      <CategoryProductsDetails category={data?.productCategory} heading={"Recommended Products"} />
     </div>
   )
 }

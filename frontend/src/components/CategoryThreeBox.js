@@ -1,41 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import fetchCategoryWiseProduct from '../helpers/fetchCategoryWiseProduct.js';
 import DisplayCurrency from "../helpers/DisplayCurrency.js";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import addToCart from '../helpers/addToCart.js';
 import context from '../context/index.js';
 import { useContext } from 'react';
+import Api from '../common/index.js';
+import { toast } from 'react-toastify';
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
-const CategoryThreeBox = ({ category, heading, content,products = null }) => {
+const CategoryThreeBox = ({ category, heading, content, products = null }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(10).fill(0);
 
     const { fetchUserAddToCart } = useContext(context);
+    const [isWishlisted, setIsWishlisted] = useState(false);
+    const { fetchAddTocart, fetchWishlist } = useContext(context);
+    const navigate = useNavigate();
 
-    const handleaddToCart = async (e,id) => {
-        await addToCart(e,id)
+    const handleaddToCart = async (e, id) => {
+        await addToCart(e, id)
         fetchUserAddToCart();
+        navigate("/cart")
     }
 
-useEffect(() => {
-    if (products && Array.isArray(products)) {
-        setData(products);
-        setLoading(false);
-    }
-}, [products]);
-
-useEffect(() => {
-    const fetchData = async () => {
-        if (!products && category) {
-            setLoading(true);
-            const response = await fetchCategoryWiseProduct(category);
-            setData(response?.data || []);
+    useEffect(() => {
+        if (products && Array.isArray(products)) {
+            setData(products);
             setLoading(false);
         }
+    }, [products]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!products && category) {
+                setLoading(true);
+                const response = await fetchCategoryWiseProduct(category);
+                setData(response?.data || []);
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [category]);
+
+    const addToWishlist = async (productId) => {
+        const response = await fetch(Api.addToWishlist.url, {
+            method: Api.addToWishlist.method,
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ productId })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            toast.success("Added to wishlist");
+            setIsWishlisted(prev => ({...prev, [productId]:true}));
+            fetchWishlist();
+        } else {
+            toast.error(data.message);
+        }
     };
-    fetchData();
-}, [category]);
 
 
     return (
@@ -79,6 +106,21 @@ useEffect(() => {
                                             className="w-full object-contain absolute top-0 left-0 transition-opacity duration-700 opacity-0 hover:opacity-100"
                                         />
                                     )}
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            e.preventDefault();
+                                            addToWishlist(product._id);
+                                        }}
+                                        className="absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:bg-red-100 transition-all z-10"
+                                        title="Add to Wishlist">
+                                            {isWishlisted[product._id] ? (
+                                                <AiFillHeart size={24} className="text-red-500" />
+                                            ):
+                                            (
+                                                <AiOutlineHeart size={24} className="text-gray-500 hover:bg-red-500" />
+                                            )}
+                                    </button>
                                 </div>
                                 <div className="p-2 grid">
                                     <h3 className="text-lg mt-2 text-center h-20 overflow-hidden text-ellipsis font-medium">{product.productName}</h3>

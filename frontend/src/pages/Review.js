@@ -1,71 +1,69 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/pagination"; // Import pagination styles
+import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import { Autoplay, Pagination } from "swiper/modules"; // Import Pagination module
+import { Autoplay, Pagination } from "swiper/modules";
+import { FaStar, FaStarHalf } from "react-icons/fa6";
 
 export default function ProductCarousel() {
   const productData = [
     {
       id: 1,
       image: "https://cdn.shopify.com/s/files/1/0780/2116/5367/files/81a027cb-fb25-4fed-a2bc-cb4373a961c7.jpg?v=1735227335",
-      title: "Hand Painted Blue Kaushalam Tea Pot in Aluminium",
-      price: 150,
+      title: "This white outfit made me feel like a princess.The elegant design with the cape is stunning and unique.",
+      name: "Charmee Shah"
     },
     {
       id: 2,
       image: "https://cdn.shopify.com/s/files/1/0780/2116/5367/files/feb0e419-a458-4798-b579-e852887af986.jpg?v=1735226937",
-      title: "Kaushalam kalash Copper Pot",
-      price: 120,
+      title: "This white outfit made me feel like a princess.The elegant design with the cape is stunning and unique.",
     },
     {
       id: 3,
       image: "https://cdn.shopify.com/s/files/1/0780/2116/5367/files/19a89a76-b1d0-4dcf-b37b-3c4717fc911e.jpg?v=1735227023",
-      title: "Hand Painted Blue Kaushalam Tea Pot in Aluminium",
-      price: 130,
+      title: "This white outfit made me feel like a princess.The elegant design with the cape is stunning and unique.",
     },
     {
       id: 4,
       image: "https://cdn.shopify.com/s/files/1/0780/2116/5367/files/dde94883-7c5e-4ef0-a931-dde120cf7cdf.jpg?v=1735227041",
-      title: "Hand Painted Blue Kaushalam Tea Pot in Aluminium",
-      price: 120,
+      title: "This white outfit made me feel like a princess.The elegant design with the cape is stunning and unique.",
     },
     {
       id: 5,
-      image: "https://cdn.shopify.com/s/files/1/0780/2116/5367/files/dde94883-7c5e-4ef0-a931-dde120cf7cdf.jpg?v=1735227041",
-      title: "Hand Painted Blue Kaushalam Tea Pot in Aluminium",
-      price: 120,
+      image: "https://cdn.shopify.com/s/files/1/0780/2116/5367/files/73e14d0e-e4f4-47d1-b03f-0f502a42d09a.jpg?v=1735226969",
+      title: "This white outfit made me feel like a princess.The elegant design with the cape is stunning and unique.",
+      name: "Charmee Shah"
     },
   ];
 
   return (
     <section className="py-10 bg-white relative">
       <div className="container mx-auto px-6">
-        <h1 className="text-center text-3xl font-semibold mb-6">Bestselling Products</h1>
-
+        <div className="flex justify-center my-12">
+          <h1 className="text-3xl px-1 text-center text-white bg-pink-800 uppercase tracking-wider">Client Reviews</h1>
+        </div>
         <Swiper
-          slidesPerView={3} // Adjust number of slides shown at a time
+          slidesPerView={4}
           spaceBetween={20}
           loop={true}
           autoplay={{ delay: 2000, disableOnInteraction: false }}
-          pagination={{ clickable: true }} // Enable dots pagination
-          modules={[Autoplay, Pagination]} // Include Pagination module
+          pagination={{ clickable: true }}
+          modules={[Autoplay, Pagination]}
           className="w-full"
         >
           {productData.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="p-4">
-                <div className="h-full border border-gray-300 rounded-xl overflow-hidden shadow-md cursor-pointer">
-                  <img className="h-56 w-full object-cover" src={item.image} alt={item.title} />
+              <div className="p-2">
+                <div className="h-full border border-gray-300 rounded-sm overflow-hidden shadow-md cursor-pointer">
+                  <img className="w-full object-contain" src={item.image} alt={item.title} />
                   <div className="p-4">
-                    <h1 className="text-lg font-medium text-gray-900 mb-2">
-                      {item.title.substring(0, 25)}...
+                    <div className='flex gap-1 items-center justify-center text-xl text-yellow-600'>
+                      <FaStar /><FaStar /><FaStar /><FaStar /><FaStarHalf />
+                    </div>
+                    <h1 className="text-md text-gray-900 mb-2 text-center mt-2">
+                      {item.title}
                     </h1>
-                    <h2 className="text-lg font-medium text-gray-900 mb-3">₹{item.price}</h2>
-                    <button className="bg-pink-500 hover:bg-pink-600 w-full text-white py-2 rounded-lg font-bold">
-                      Add To Cart
-                    </button>
-                  </div>
+                 </div>
                 </div>
               </div>
             </SwiperSlide>

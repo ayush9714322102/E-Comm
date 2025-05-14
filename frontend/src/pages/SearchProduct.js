@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Api from '../common/index.js'
-import CategoryThreeBox from '../components/SearchThreeProducts.js'
+import CategoryThreeBox from '../components/CategoryThreeBox.js'
 
 const SearchProduct = () => {
     const location = useLocation()
@@ -23,17 +23,18 @@ const SearchProduct = () => {
     }, [location])
 
     return (
-        <div className='mt-40'>
+        <div className="pt-24 px-4">
+
             {
                 loading && (
-                    <p className='text-xl text-center italic font-semibold'>loading...</p>
+                    <p className='text-center text-3xl italic font-semibold'>loading...</p>
                 )
             }
-            <h2 className='text-xl text-center italic font-semibold underline'>Search Results : <span className='text-pink-800'>{products.length}</span></h2>
+            <h2 className="text-xl text-center font-semibold mb-4">Search Results : {products.length}</h2>
 
             {
                 products.length === 0 && !loading && (
-                    <p className='text-xl text-center italic font-semibold'>No Products Found</p>
+                    <p className="text-xl text-center font-semibold mb-4">No Data Found</p>
                 )
             }
 
@@ -42,6 +43,7 @@ const SearchProduct = () => {
                     <CategoryThreeBox products={products} />
                 )
             }
+
         </div>
     )
 }

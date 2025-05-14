@@ -25,6 +25,7 @@
   import deleteAddToCartProduct from "./routes/deleteAddToCartRoutes.js";
   import PaymentRoutes from './routes/orderRoutes/orderRoutes.js'
   import orderRoutes from './routes/orderRoutes/orderRoutes.js'
+  import wishlist from "./routes/wishListRoutes.js";
 
   const app = express();
 
@@ -65,6 +66,8 @@
 
   //order routes
   app.use("/order",orderRoutes)
+
+  app.use("/wishlist",wishlist)
 
   connectDB().then(() => {
     app.listen(3000, () => {

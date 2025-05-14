@@ -8,7 +8,7 @@ export const createOrder = async (req, res) => {
         const { amount } = req.body;
 
         const options = {
-            amount: amount * 100, // in paise
+            amount: amount * 100,
             currency: "INR",
             receipt: `receipt_order_${Date.now()}`
         };
@@ -26,9 +26,8 @@ export const createOrder = async (req, res) => {
     }
 };
 
-// optional: to verify payment success after payment
 export const verifyPayment = async (req, res) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData } = req.body;
 
     try {
         const sign = crypto
@@ -40,33 +39,33 @@ export const verifyPayment = async (req, res) => {
             return res.status(400).json({ success: false, message: "Invalid signature" });
         }
 
-        // ✅ Fetch all cart products of the user
         const cartItems = await cartModel.find({ userId: req.userId }).populate("productId");
 
         if (!cartItems || cartItems.length === 0) {
             return res.status(404).json({ success: false, message: "Cart is empty" });
         }
 
-        // ✅ Convert cart items to order items format
-        const items = cartItems.map(item => ({
-            product: item.productId._id, // ✅ make sure this is a valid ObjectId
-            quantity: item.quantity,
+        const formattedItems = cartItems.map(item => ({
+            product: item.productId._id,
+            quantity: item.quantity
         }));
 
         const newOrder = new orderModel({
             user: req.userId,
-            items,
+            items: formattedItems,
             paymentId: razorpay_payment_id,
             orderId: razorpay_order_id,
             signature: razorpay_signature,
+            status: "Pending",
+            deliveryInfo: formData
         });
 
         await newOrder.save();
 
-        // ✅ Clear cart after order
+
         await cartModel.deleteMany({ userId: req.userId });
 
-        res.json({ success: true, message: "Payment verified and order saved" });
+        return res.json({ success: true, message: "Payment verified and order saved" });
 
     } catch (error) {
         console.error("Error in verifyPayment:", error);

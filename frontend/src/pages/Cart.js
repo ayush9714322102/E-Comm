@@ -3,16 +3,30 @@ import SummaryApi from "../common/index.js";
 import Context from '../context/index.js';
 import displayCurrency from "../helpers/DisplayCurrency.js";
 import { MdDelete } from "react-icons/md";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import loadRazorpayScript from "../helpers/razorpayScript.js";
 
-const Cart = () => {
+
+const Cart = ({ onClose }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const context = useContext(Context);
     const loadingCart = new Array(context.CartProductCount).fill(null);
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        fullname: '',
+        address: '',
+        city: '',
+        state: '',
+        pincode: '',
+        mobile: '',
+        landmark: ''
+    });
+
+    const handleFormData = () => {
+        const { fullname, address, city, state, pincode, country, mobile } = formData;
+        return fullname && address && city && state && pincode && country && mobile;
+    }
+
 
     const fetchData = async () => {
         setLoading(true);
@@ -30,80 +44,6 @@ const Cart = () => {
             setData(responseData.data);
         }
     };
-
-
-    const handleCheckout = async () => {
-        const res = await loadRazorpayScript();
-        if (!res) {
-            toast.error("Razorpay SDK failed to load.");
-            return;
-        }
-
-        try {
-            // Call backend to create order
-            const orderResponse = await fetch(SummaryApi.createOrder.url, {
-                method: SummaryApi.createOrder.method,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify({ amount: totalPrice })
-            });
-
-            const { order, success } = await orderResponse.json();
-
-            if (!success) {
-                toast.error("Failed to create order.");
-                return;
-            }
-
-            const options = {
-                key: "rzp_test_VLWNcRSixFt4ou", // or expose it from your backend safely
-                amount: order.amount,
-                currency: order.currency,
-                name: "Your Shop Name",
-                description: "Order Payment",
-                order_id: order.id,
-                handler: async function (response) {
-                    const verifyResponse = await fetch(SummaryApi.verifyPayment.url, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        credentials: "include",
-                        body: JSON.stringify(response)
-                    });
-
-                    const verifyData = await verifyResponse.json();
-
-                    if (verifyData.success) {
-                        toast.success("Payment Successful!");
-                        await fetchData(); // refetch cart to reflect deletion
-                        context.fetchUserAddToCart(); // ✅ Correct
-                        navigate("/order");
-                    } else {
-                        toast.error("Payment Verification Failed!");
-                    }
-                },
-
-                prefill: {
-                    name: "User Name",
-                    email: "user@example.com"
-                },
-                theme: {
-                    color: "#900C3F"
-                }
-            };
-
-            const razor = new window.Razorpay(options);
-            razor.open();
-
-        } catch (error) {
-            console.error("Checkout error:", error);
-            toast.error("Something went wrong during checkout.");
-        }
-    };
-
 
     useEffect(() => {
         fetchData();
@@ -197,9 +137,9 @@ const Cart = () => {
                                     </div>
                                     <h2 className='taxt-lg lg:text-xl text-ellipsis line-clamp-1'>{product?.productId?.productName}</h2>
                                     <p className='capitalize mt-2 text-lg text-slate-600'>{product?.productId?.productCategory}</p>
-                                    <div className='flex items-center justify-between'>
+                                    <div className='flex items-center gap-2'>
                                         <p className='font-medium text-lg mt-2'>{displayCurrency(product?.productId?.sellingPrice)}</p>
-                                        <p className='text-slate-600 font-semibold text-lg mt-2'>{displayCurrency(product?.productId?.sellingPrice * product.quantity)}</p>
+                                        <p className='text-slate-500 font-semibold text-md mt-2 '><del>{displayCurrency(product?.productId?.productPrice)}</del></p>
                                     </div>
                                     <div className='flex items-center gap-3 mt-3'>
                                         <button className='w-7 h-7 flex justify-center items-center text-lg bg-rose-500 text-white' onClick={() => decresQty(product?._id, product?.quantity)}>-</button>
@@ -212,7 +152,6 @@ const Cart = () => {
                     )}
                 </div>
 
-
                 <div className='h-40 lg:mt-0 w-full max-w-md'>
                     <h2 className='text-white bg-rose-600 px-4 py-2 font-semibold'>Total Amount</h2>
                     <div className='flex items-center justify-between px-4 gap-2 font-medium text-lg mt-2'>
@@ -223,14 +162,12 @@ const Cart = () => {
                         <p>Total Price</p>
                         <p>{displayCurrency(totalPrice)}</p>
                     </div>
-
-                    <button onClick={handleCheckout} className='bg-blue-600 p-2 text-white w-full uppercase'>
-                        Payment
+                    <button
+                        onClick={() => navigate("/orderdetails", { state: { totalPrice } })}
+                        className='bg-blue-600 p-2 text-white w-full uppercase'>
+                        process to Checkout
                     </button>
                 </div>
-
-                {/* Total Product */}
-
             </div>
         </div>
     );

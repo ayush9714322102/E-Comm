@@ -89,8 +89,14 @@ const SummaryApi = {
         url: `${backendDomin}/order/getOrder`,
         method: "get"
     },
-    cancelOrder: { url: (id) => `${backendDomin}/order/cancelOrder/${id}`, method: "PUT" },
-    deleteOrder: { url: (id) => `${backendDomin}/order/deleteOrder/${id}`, method: "DELETE" },
+    cancelOrder: {
+        url: (id) => `${backendDomin}/order/cancelOrder/${id}`,
+        method: "PUT"
+    },
+    deleteOrder: {
+        url: (id) => `${backendDomin}/order/deleteOrder/${id}`,
+        method: "DELETE"
+    },
     getAllOrders: {
         url: `${backendDomin}/order/getAllOrders`,
         method: "get"
@@ -99,10 +105,26 @@ const SummaryApi = {
         url: `${backendDomin}/order/updateOrder`,
         method: "put"
     },
-    orderDetails : {
+    orderDetails: {
         url: `${backendDomin}/order/create`,
         method: "post"
-    }
+    },
+    addToWishlist: {
+        url: `${backendDomin}/wishlist/add`,
+        method: "post"
+    },
+    getWishlist: {
+        url: `${backendDomin}/wishlist/get`,
+        method: "get"
+    },
+    deleteWishlist: {
+        url: (productId) => `${backendDomin}/wishlist/delete/${productId}`,
+        method: "delete"
+    },
+    getWishlistCount: {
+        url: `${backendDomin}/wishlist/getCount`,
+        method: "get"
+    },
 }
 
 export default SummaryApi;

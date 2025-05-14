@@ -36,6 +36,7 @@ import OrderPage from "../pages/OrderPage";
 import Policy from "../FooterPages/Policy";
 import Return from "../FooterPages/Return";
 import OrderForm from "../pages/OrderForm";
+import Wishlist from "../components/Wishlist";
 
 const router = createBrowserRouter([
     {
@@ -169,6 +170,10 @@ const router = createBrowserRouter([
             {
                 path: "orderdetails",
                 element: <OrderForm/>
+            },
+            {
+                path:"wishlist",
+                element:<Wishlist/>
             },
             {
                 path: "admin-panel",
